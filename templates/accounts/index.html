@@ -1,8 +1,0 @@
-<!-- index.html -->
-{% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }}!</p>
-    <a href="{% url 'accounts:logout' %}">Logout</a>
-{% else %}
-    <a href="{% url 'accounts:signup' %}">회원가입</a>
-    <a href="{% url 'accounts:login' %}">Login</a>
-{% endif %}
