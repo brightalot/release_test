@@ -14,6 +14,11 @@ services:
       - "8001:8001"
     depends_on:
       - redis
+    environment:
+      DJANGO_SECRET: ${DJANGO_SECRET}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
 
   nginx:
     image: nginx:alpine
