@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # Expose the port the app runs on
-EXPOSE 8000
+EXPOSE 8001
 
 # Run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8001", "config.asgi:application"]

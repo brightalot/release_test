@@ -20,14 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 def get_env_variable(var_name):
-  try:
-    return os.environ[var_name]
-  except KeyError:
-    error_msg = 'Set the {} environment variable'.format(var_name)
-    raise ImproperlyConfigured(error_msg)
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(var_name)
+        raise ImproperlyConfigured(error_msg)
 
 SECRET_KEY = get_env_variable('DJANGO_SECRET')
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
@@ -53,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'corsheaders',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +86,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
+ASGI_APPLICATION = 'config.asgi.application'  # ASGI 설정 추가
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -141,8 +141,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # 정적 파일 루트 변경
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# Channels 및 Redis 설정
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.getenv('REDIS_URL', 'redis://localhost:6379')],
+        },
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
